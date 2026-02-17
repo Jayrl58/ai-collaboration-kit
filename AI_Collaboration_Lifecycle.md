@@ -24,7 +24,7 @@ Projects may pin to a specific version if required.
 
 ---
 
-# Universal Startup Protocol (v1.5)
+# Universal Startup Protocol (v1.6)
 
 Triggered by:
 
@@ -92,7 +92,7 @@ Execution begins after selection.
 
 ---
 
-# Continuity Lock (v4.0 — Strict Enforcement)
+# Continuity Lock (v4.1 — Global Wrapper Enforcement)
 
 Continuity Lock is mandatory at the end of every session.
 
@@ -103,13 +103,16 @@ Triggered by:
 
 ---
 
-## Enforcement Mode
+## Enforcement Mode (Global Supremacy)
 
-Invocation of "Continuity Lock" enters exclusive structured execution mode.
+Invocation of "Continuity Lock" always enters the global strict 5-step sequence.
 
-- The system must execute the fixed 5-step sequence below.
+Rules:
+
+- The global structure supersedes all project-specific routines.
+- No project continuity procedure may execute unless Step 4 explicitly triggers it.
+- Direct execution of project continuity logic outside the global wrapper is prohibited.
 - No summarization, deviation, alternate flows, or optional skipping permitted.
-- No additional analysis outside the defined sequence.
 - The sequence must complete fully before exiting.
 
 ---
@@ -148,11 +151,22 @@ Explicitly evaluate whether any structural trigger occurred:
 - Architecture change
 - Major feature integration
 
-If yes:
-- Initiate Restart Snapshot process.
+If no trigger:
+- Proceed directly to Step 5.
 
-If no:
-- Proceed.
+If trigger confirmed:
+
+1. Check project startup document for a section titled:
+   "Project Continuity Procedure"
+
+2. If present:
+   - Execute that procedure.
+   - Return to global flow.
+
+3. If absent:
+   - Perform generic snapshot handling only.
+
+Project-specific continuity procedures may only run within this step.
 
 ---
 
@@ -181,6 +195,7 @@ Start new chat
 → Display milestone frame  
 → State assessment + options  
 → Execution  
-→ Continuity Lock (strict 5-step mode)  
+→ Continuity Lock (global wrapper)  
+→ Optional project continuity (inside Step 4 only)  
 → AAR  
 → Snapshot (if triggered)
