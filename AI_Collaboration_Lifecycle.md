@@ -24,7 +24,7 @@ Projects may pin to a specific version if required.
 
 ---
 
-# Universal Startup Protocol (v1.6)
+# Universal Startup Protocol (v1.7 — Term Binding)
 
 Triggered by:
 
@@ -61,7 +61,22 @@ User may not bypass this requirement.
 
 ---
 
-## Step 2 — Milestone Anchor
+## Step 2 — Term Binding (Internal)
+
+After global and project documents are loaded and validated, the system must internally bind the meaning of critical structural commands to this lifecycle document.
+
+Binding Rule:
+
+- The phrase "Continuity Lock" is defined exclusively by this document.
+- Project-specific routines must not reinterpret "Continuity Lock" as a standalone project procedure.
+- Project continuity procedures (if defined) may only execute inside:
+  Continuity Lock → Step 4 (Snapshot Evaluation), when a snapshot trigger is confirmed.
+
+This binding is automatic and requires no user action.
+
+---
+
+## Step 3 — Milestone Anchor
 
 Display the project's Startup_Milestone_Frame.md verbatim.
 
@@ -73,7 +88,7 @@ Displaying the milestone frame serves as implicit startup acknowledgment.
 
 ---
 
-## Step 3 — State Assessment Output
+## Step 4 — State Assessment Output
 
 Immediately after displaying the milestone frame:
 
@@ -191,7 +206,7 @@ Full AAR entry required only if signal exists.
 
 Start new chat  
 → Validate global docs  
-→ Validate project docs (hard stop if missing)  
+→ Internal term binding (Continuity Lock = global)  
 → Display milestone frame  
 → State assessment + options  
 → Execution  
