@@ -1,216 +1,197 @@
 # AI Collaboration Lifecycle
 
-This document defines session startup and session close mechanics.
+This document governs startup and session-close mechanics for all
+projects using the AI Collaboration Kit.
 
-Behavioral doctrine is defined in:
+Behavioral doctrine is defined in: - Working_Preferences_Generalized.md
 
-Working_Preferences_Generalized.md
+Command semantics are defined in: - Command_Glossary.md
 
-Command definitions are defined in:
-
-Command_Glossary.md
-
----
+------------------------------------------------------------------------
 
 # Version Model
 
-Global collaboration documents are managed using a Version Channel model.
+Global collaboration documents use a Version Channel model.
 
 Projects reference a channel (e.g., `stable`) rather than `main`.
 
-The `stable` tag is moved intentionally to adopt new structural updates.
+The `stable` tag is moved intentionally after structural updates.
 
-Projects may pin to a specific version if required.
+------------------------------------------------------------------------
 
----
+# Universal Startup Protocol (Minimalist + Hard-Fail)
 
-# Universal Startup Protocol (v1.7 — Term Binding)
+Triggered by: Start new chat
 
-Triggered by:
+Startup runs as a deterministic pipeline. No pauses between steps unless
+a required document is missing.
 
-Start new chat
+------------------------------------------------------------------------
 
----
+## Step 1 --- Hard Validation
 
-## Step 1 — Context Acquisition
+1.  Load STARTUP_SOURCES.md.
+2.  Fetch all required global documents.
+3.  Fetch all required project documents.
 
-When startup is triggered:
+If any required document fails to load:
 
-1. Check for required startup documents.
-2. If missing, prompt:
+Startup failed. Missing required document: - `<filename>`{=html}
 
-   "Startup documents not detected. Upload now or proceed without authoritative context?"
+Provide file or correct STARTUP_SOURCES.md.
 
-3. Load STARTUP_SOURCES.md.
+Startup stops immediately.
 
-4. Validate required project-specific documents listed in STARTUP_SOURCES.md.
+------------------------------------------------------------------------
 
-If any required project documents are not accessible:
+## Step 2 --- Display Active Documents
 
-Hard stop and prompt explicitly:
+If validation succeeds, print only:
 
-"Project startup documents not detected.
-Upload the following files or provide public raw URLs:
+Startup Sources Loaded --- `<Project>`{=html}
 
-- Startup_Milestone_Frame.md
-- <Project>_Project_Startup.md"
+Global Documents (stable): - Working_Preferences_Generalized.md -
+Command_Glossary.md - AI_Collaboration_Lifecycle.md -
+AI_Collaboration_AAR_Log.md
 
-Do not proceed until resolved.
+Project Documents (`<Project>`{=html} / `<ref>`{=html}): -
+Startup_Milestone_Frame.md - `<Project>`{=html}\_Project_Startup.md
 
-User may not bypass this requirement.
+No commentary. No explanations. File list equals acknowledgment.
 
----
+------------------------------------------------------------------------
 
-## Step 2 — Term Binding (Internal)
+## Step 3 --- Display Milestone State
 
-After global and project documents are loaded and validated, the system must internally bind the meaning of critical structural commands to this lifecycle document.
+Print:
 
-Binding Rule:
+Current Milestone State:
 
-- The phrase "Continuity Lock" is defined exclusively by this document.
-- Project-specific routines must not reinterpret "Continuity Lock" as a standalone project procedure.
-- Project continuity procedures (if defined) may only execute inside:
-  Continuity Lock → Step 4 (Snapshot Evaluation), when a snapshot trigger is confirmed.
+Display Startup_Milestone_Frame.md verbatim.
 
-This binding is automatic and requires no user action.
+No commentary during display.
 
----
+------------------------------------------------------------------------
 
-## Step 3 — Milestone Anchor
+## Step 4 --- State Assessment + Options
 
-Display the project's Startup_Milestone_Frame.md verbatim.
+Immediately after milestone display:
 
-No commentary.
-No expansion.
-No modification.
+-   Brief current-state assessment
+-   1--5 next-step options
+-   1--2 pros/cons per option
+-   Single recommendation
 
-Displaying the milestone frame serves as implicit startup acknowledgment.
+Then wait for session goal selection.
 
----
+Startup completes only after goal selection.
 
-## Step 4 — State Assessment Output
+------------------------------------------------------------------------
 
-Immediately after displaying the milestone frame:
+# Continuity Lock (Strict Structured Close)
 
-Provide:
+Purpose: End session in a way that guarantees restart without loss of
+progress.
 
-- Brief current state assessment
-- 1–5 logically grounded next-step options
-- 1–2 pros/cons per option
-- A single recommendation
+Triggered by: - Explicit command: Continuity Lock - Or fatigue signals
+prompting lock
 
-Wait for session goal selection.
+Continuity Lock must execute the following steps visibly and in order.
+No compression. No narrative substitution.
 
-Startup ends only after the user selects the session goal.
+------------------------------------------------------------------------
 
-Execution begins after selection.
+## 1) Milestone State Reconciliation
 
----
+Internally compare current milestone state with
+Startup_Milestone_Frame.md.
 
-# Continuity Lock (v4.1 — Global Wrapper Enforcement)
+If mismatch detected:
 
-Continuity Lock is mandatory at the end of every session.
+Mismatch detected: - `<describe change>`{=html}
 
-Triggered by:
+Update milestone frame to reflect current state? (Yes/No)
 
-- Explicit command: Continuity Lock
-- Or implicit fatigue signals (prompted, not automatic)
+If Yes: - Generate full replacement of Startup_Milestone_Frame.md. -
+Display updated milestone frame.
 
----
+If No: - Abort Continuity Lock.
 
-## Enforcement Mode (Global Supremacy)
+If no mismatch: Display milestone frame verbatim.
 
-Invocation of "Continuity Lock" always enters the global strict 5-step sequence.
+------------------------------------------------------------------------
 
-Rules:
+## 2) Document Integrity Check
 
-- The global structure supersedes all project-specific routines.
-- No project continuity procedure may execute unless Step 4 explicitly triggers it.
-- Direct execution of project continuity logic outside the global wrapper is prohibited.
-- No summarization, deviation, alternate flows, or optional skipping permitted.
-- The sequence must complete fully before exiting.
+### A) Structural Scan
 
----
+Assistant lists potential structural signals from session:
 
-## Execution Order (Fixed and Mandatory)
+Examples: - Milestone change - Rule clarification - Lifecycle
+modification - Startup modification - Architecture change - New
+authoritative document
 
-### 1) Milestone Confirmation
+If none detected: No structural signals detected.
 
-- Display milestone frame verbatim.
-- Confirm status accuracy.
-- Update if required.
+### B) User Confirmation
 
----
+Were any structural decisions made this session that require document
+updates? (Yes/No)
 
-### 2) Document Integrity Check
+If Yes: Identify required documents for full replacement.
 
-- Confirm whether any structural documents changed.
-- Regenerate or update if required.
+------------------------------------------------------------------------
 
----
+## 3) Repository Integrity
 
-### 3) Repository Integrity
+Request `git status` in project repo.
 
-- Request `git status`.
-- Ensure working tree is clean.
-- Require commit if changes exist.
+If collaboration kit repo was modified this session, request
+`git status` there as well.
 
----
+Working tree must be clean.
 
-### 4) Snapshot Evaluation
+If not clean: - Stage - Commit - Push
 
-Explicitly evaluate whether any structural trigger occurred:
+Confirm clean state before proceeding.
 
-- Milestone status change
-- Rule change
-- Architecture change
-- Major feature integration
+------------------------------------------------------------------------
 
-If no trigger:
-- Proceed directly to Step 5.
+## 4) Snapshot Evaluation
 
-If trigger confirmed:
+Explicitly evaluate:
 
-1. Check project startup document for a section titled:
-   "Project Continuity Procedure"
+Did any of the following occur? - Milestone state change - Rule change -
+Architecture change - Major feature integration
 
-2. If present:
-   - Execute that procedure.
-   - Return to global flow.
+If Yes: Execute project-specific continuity procedure. Then return to
+global flow.
 
-3. If absent:
-   - Perform generic snapshot handling only.
+If No: State snapshot not required.
 
-Project-specific continuity procedures may only run within this step.
+------------------------------------------------------------------------
 
----
+## 5) After-Action Review (AAR)
 
-### 5) After-Action Review (AAR)
+AI Collaboration AAR:
 
-Quick check every session:
+-   Any friction?
+-   Anything unusually effective?
+-   Calibration adjustment needed?
 
-- Any friction?
-- Anything unusually effective?
-- Any calibration adjustment needed?
-- Action required?
+"No notes" allowed.
 
-Response may be:
+Project AAR is only triggered when user states: Add this to the project
+AAR.
 
-No notes.
-
-Full AAR entry required only if signal exists.
-
----
+------------------------------------------------------------------------
 
 # Lifecycle Summary
 
-Start new chat  
-→ Validate global docs  
-→ Internal term binding (Continuity Lock = global)  
-→ Display milestone frame  
-→ State assessment + options  
-→ Execution  
-→ Continuity Lock (global wrapper)  
-→ Optional project continuity (inside Step 4 only)  
-→ AAR  
-→ Snapshot (if triggered)
+Startup: Hard validation → file list → milestone display →
+assessment/options
+
+Execution: One logical objective per response
+
+Close: Milestone reconciliation → document integrity → repo integrity →
+snapshot evaluation → AAR
