@@ -19,16 +19,31 @@ The `stable` tag is moved intentionally after structural updates.
 
 ------------------------------------------------------------------------
 
-# Universal Startup Protocol (v2.2 --- Literal Template Enforcement)
+# Startup Runtime Flags
 
-Triggered by: Start new chat
+If STARTUP_SOURCES.md includes runtime flags, they are authoritative for
+startup/close rendering.
 
-Startup executes as a deterministic pipeline. No pauses between steps
+Recognized flags: - STARTUP_RENDER_MODE: STRICT_TEMPLATE_V2 -
+CONTINUITY_MODE: STRICT_5\_STEP
+
+Precedence rule: - If STARTUP_RENDER_MODE is present, it overrides any
+legacy or narrative startup rendering. - If CONTINUITY_MODE is present,
+it overrides any narrative continuity rendering.
+
+------------------------------------------------------------------------
+
+# Universal Startup Protocol (Strict Pipeline)
+
+Triggered by: - Upload STARTUP_SOURCES.md - Then invoke: "Start new
+chat" (with Project: `<name>`{=html})
+
+Startup runs as a quiet pipeline. No prompts or questions during steps
 unless a required document is missing.
 
 ------------------------------------------------------------------------
 
-## Step 1 --- Hard Validation
+## Step 1 --- Hard Validation (Quiet)
 
 1.  Load STARTUP_SOURCES.md.
 2.  Fetch all required global documents.
@@ -42,22 +57,21 @@ Then stop.
 
 ------------------------------------------------------------------------
 
-## Step 2 --- Literal Output Template (MUST COPY VERBATIM)
+## Step 2 --- Apply Runtime Render Mode (Quiet)
 
-If validation succeeds, the assistant MUST output the following template
-verbatim, changing ONLY the placeholder values (`<Project>`{=html},
-`<ref>`{=html}) and the bullet lists ONLY if STARTUP_SOURCES.md defines
-different required docs.
+If STARTUP_RENDER_MODE is present in STARTUP_SOURCES.md: - Bind startup
+rendering to that mode. - Suppress all narrative headings and
+acknowledgments. - Proceed immediately to Step 3.
 
-If the assistant cannot comply exactly, output ONLY:
-
-STARTUP_FORMAT_ERROR
-
-Do not add any other text.
+If STARTUP_RENDER_MODE is absent: - Use default (non-strict) rendering,
+but still proceed to Step 3.
 
 ------------------------------------------------------------------------
 
-MUST OUTPUT EXACTLY (copy/paste, fill placeholders only):
+## Step 3 --- Output Active Documents (Visible)
+
+If STARTUP_RENDER_MODE = STRICT_TEMPLATE_V2, the assistant MUST output
+the following block with no extra text.
 
 Startup Sources Loaded --- `<Project>`{=html}
 
@@ -68,12 +82,32 @@ AI_Collaboration_AAR_Log.md
 Project Documents (`<Project>`{=html} / `<ref>`{=html}): -
 Startup_Milestone_Frame.md - `<Project>`{=html}\_Project_Startup.md
 
+------------------------------------------------------------------------
+
+## Step 4 --- Output Milestone State (Visible)
+
+Print:
+
 Current Milestone State:
 
-(Display Startup_Milestone_Frame.md verbatim)
+Then display Startup_Milestone_Frame.md verbatim.
 
-State Assessment + Options: - Brief current-state assessment - 1--5
-next-step options - 1--2 pros/cons per option - Single recommendation
+No commentary during display.
+
+------------------------------------------------------------------------
+
+## Step 5 --- State Assessment + Options (Visible)
+
+Immediately after milestone display:
+
+-   Brief current-state assessment
+-   1--5 next-step options
+-   1--2 pros/cons per option
+-   Single recommendation
+
+Then wait for session goal selection.
+
+Startup completes only after user selects a session goal.
 
 ------------------------------------------------------------------------
 
@@ -85,8 +119,9 @@ progress.
 Triggered by: - Explicit command: Continuity Lock - Or fatigue signals
 prompting lock
 
-Continuity Lock must execute the following steps visibly and in order.
-No compression. No narrative substitution.
+If CONTINUITY_MODE = STRICT_5\_STEP is present in STARTUP_SOURCES.md,
+the assistant MUST render steps 1--5 explicitly and may not substitute
+narrative summaries.
 
 ------------------------------------------------------------------------
 
@@ -172,5 +207,3 @@ AI Collaboration AAR:
 
 Project AAR is only triggered when user states: Add this to the project
 AAR.
-
-------------------------------------------------------------------------
