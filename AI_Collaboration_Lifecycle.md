@@ -19,7 +19,7 @@ The `stable` tag is moved intentionally after structural updates.
 
 ------------------------------------------------------------------------
 
-# Universal Startup Protocol (Strict Rendering Enforcement)
+# Universal Startup Protocol (v2.2 --- Literal Template Enforcement)
 
 Triggered by: Start new chat
 
@@ -34,26 +34,30 @@ unless a required document is missing.
 2.  Fetch all required global documents.
 3.  Fetch all required project documents.
 
-If any required document fails to load:
+If any required document fails to load, output ONLY:
 
-Startup failed. Missing required document: - `<filename>`{=html}
+STARTUP_FAILED Missing: - `<filename>`{=html}
 
-Startup stops immediately.
-
-------------------------------------------------------------------------
-
-## Step 2 --- Mandatory Startup Rendering Format
-
-If validation succeeds, the assistant MUST render startup in the exact
-sequence below.
-
-No narrative headings. No commentary. No governance explanations. No
-"ready" statements. No additional text before, between, or after these
-blocks.
+Then stop.
 
 ------------------------------------------------------------------------
 
-### Block 1 --- Active Documents
+## Step 2 --- Literal Output Template (MUST COPY VERBATIM)
+
+If validation succeeds, the assistant MUST output the following template
+verbatim, changing ONLY the placeholder values (`<Project>`{=html},
+`<ref>`{=html}) and the bullet lists ONLY if STARTUP_SOURCES.md defines
+different required docs.
+
+If the assistant cannot comply exactly, output ONLY:
+
+STARTUP_FORMAT_ERROR
+
+Do not add any other text.
+
+------------------------------------------------------------------------
+
+MUST OUTPUT EXACTLY (copy/paste, fill placeholders only):
 
 Startup Sources Loaded --- `<Project>`{=html}
 
@@ -64,28 +68,109 @@ AI_Collaboration_AAR_Log.md
 Project Documents (`<Project>`{=html} / `<ref>`{=html}): -
 Startup_Milestone_Frame.md - `<Project>`{=html}\_Project_Startup.md
 
-------------------------------------------------------------------------
-
-### Block 2 --- Milestone State
-
 Current Milestone State:
 
 (Display Startup_Milestone_Frame.md verbatim)
 
-------------------------------------------------------------------------
-
-### Block 3 --- State Assessment + Options
-
--   Brief current-state assessment
--   1--5 next-step options
--   1--2 pros/cons per option
--   Single recommendation
-
-Startup completes only after user selects a session goal.
+State Assessment + Options: - Brief current-state assessment - 1--5
+next-step options - 1--2 pros/cons per option - Single recommendation
 
 ------------------------------------------------------------------------
 
-# Continuity Lock (Unchanged)
+# Continuity Lock (Strict Structured Close)
 
-Continuity Lock behavior remains as previously defined and is not
-modified by this update.
+Purpose: End session in a way that guarantees restart without loss of
+progress.
+
+Triggered by: - Explicit command: Continuity Lock - Or fatigue signals
+prompting lock
+
+Continuity Lock must execute the following steps visibly and in order.
+No compression. No narrative substitution.
+
+------------------------------------------------------------------------
+
+## 1) Milestone State Reconciliation
+
+Internally compare current milestone state with
+Startup_Milestone_Frame.md.
+
+If mismatch detected:
+
+Mismatch detected: - `<describe change>`{=html}
+
+Update milestone frame to reflect current state? (Yes/No)
+
+If Yes: - Generate full replacement of Startup_Milestone_Frame.md. -
+Display updated milestone frame.
+
+If No: - Abort Continuity Lock.
+
+If no mismatch: Display milestone frame verbatim.
+
+------------------------------------------------------------------------
+
+## 2) Document Integrity Check
+
+### A) Structural Scan
+
+Assistant lists potential structural signals from session:
+
+Examples: - Milestone change - Rule clarification - Lifecycle
+modification - Startup modification - Architecture change - New
+authoritative document
+
+If none detected: No structural signals detected.
+
+### B) User Confirmation
+
+Were any structural decisions made this session that require document
+updates? (Yes/No)
+
+If Yes: Identify required documents for full replacement.
+
+------------------------------------------------------------------------
+
+## 3) Repository Integrity
+
+Request `git status` in project repo.
+
+If collaboration kit repo was modified this session, request
+`git status` there as well.
+
+Working tree must be clean.
+
+If not clean: - Stage - Commit - Push
+
+Confirm clean state before proceeding.
+
+------------------------------------------------------------------------
+
+## 4) Snapshot Evaluation
+
+Explicitly evaluate:
+
+Did any of the following occur? - Milestone state change - Rule change -
+Architecture change - Major feature integration
+
+If Yes: Execute project-specific continuity procedure. Then return to
+global flow.
+
+If No: State snapshot not required.
+
+------------------------------------------------------------------------
+
+## 5) After-Action Review (AAR)
+
+AI Collaboration AAR:
+
+-   Any friction?
+-   Anything unusually effective?
+-   Calibration adjustment needed?
+
+"No notes" allowed.
+
+Project AAR is only triggered when user states: Add this to the project
+AAR.
+
+------------------------------------------------------------------------
