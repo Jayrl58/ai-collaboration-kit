@@ -7,8 +7,6 @@ Behavioral doctrine is defined in: - Working_Preferences_Generalized.md
 
 Command semantics are defined in: - Command_Glossary.md
 
-------------------------------------------------------------------------
-
 # Version Model
 
 Global collaboration documents use a Version Channel model.
@@ -17,82 +15,186 @@ Projects reference a channel (e.g., `stable`) rather than `main`.
 
 The `stable` tag is moved intentionally after structural updates.
 
-------------------------------------------------------------------------
+# Startup Architecture --- Gated Structured Pipeline (v3.0)
 
-# Startup Runtime Flags
+Startup is deterministic and stepwise.
 
-If STARTUP_SOURCES.md includes runtime flags, they are authoritative for
-startup/close rendering.
+No step advances automatically.
 
-Recognized flags: - STARTUP_RENDER_MODE: STRICT_TEMPLATE_V2 -
-CONTINUITY_MODE: STRICT_5\_STEP
+Each step renders visibly and requires affirmative confirmation to
+proceed.
 
-Precedence rule: - If STARTUP_RENDER_MODE is present, it overrides any
-legacy or narrative startup rendering. - STRICT_TEMPLATE_V2 requires
-literal structured rendering and fenced milestone display.
+Accepted advancement acknowledgments include (not exhaustive):
 
-------------------------------------------------------------------------
+-   yes
+-   ok
+-   okay
+-   proceed
+-   move on
 
-# Universal Startup Protocol (Structured Pipeline v2.4)
+If a step fails, it halts and re-renders that step. No automatic
+fallback.
 
-Triggered by: - Upload STARTUP_SOURCES.md - Then invoke: "Start new
-chat" (with Project: `<name>`{=html})
+# Startup Trigger
 
-Startup runs as a structured deterministic sequence.
+Startup is triggered by:
 
-------------------------------------------------------------------------
+1)  Upload `STARTUP_SOURCES.md`
+2)  Invoke: "Start new chat" with `Project: <name>`
 
-## Step 1 --- Hard Validation (Quiet)
-
-1.  Load STARTUP_SOURCES.md.
-2.  Fetch required global documents.
-3.  Fetch required project documents.
-
-If any required document fails to load, output ONLY:
+If required documents are missing, output only:
 
 STARTUP_FAILED Missing: - `<filename>`{=html}
 
-Then stop.
+Then halt.
 
-------------------------------------------------------------------------
+# Gated Startup Steps
 
-## Step 2 --- Runtime Mode Binding (Quiet)
+## Step 1 --- Validation Result (Visible)
 
-If STARTUP_RENDER_MODE = STRICT_TEMPLATE_V2: - Suppress narrative
-startup phrasing. - Use structured output format defined below.
+System must:
 
-------------------------------------------------------------------------
+-   Confirm required global documents loaded
+-   Confirm required project documents loaded
 
-## Step 3 --- Structured Startup Output (Visible)
+Output exactly:
 
-Output exactly this structure:
+STEP 1 --- VALIDATION RESULT Global Documents: PASS / FAIL Project
+Documents: PASS / FAIL Overall: PASS / FAIL
 
-Startup Sequence --- STRICT_TEMPLATE_V2
+If FAIL: - Halt - Await correction - Re-render Step 1
 
-\[1\] Validation: PASS \[2\] Runtime Flags: STARTUP_RENDER_MODE:
-STRICT_TEMPLATE_V2 CONTINUITY_MODE: STRICT_5\_STEP \[3\] Documents
-Loaded: Global (stable): - Working_Preferences_Generalized.md -
-Command_Glossary.md - AI_Collaboration_Lifecycle.md -
-AI_Collaboration_AAR_Log.md Project (`<Project>`{=html} /
-`<ref>`{=html}): - Startup_Milestone_Frame.md -
-`<Project>`{=html}\_Project_Startup.md
+If PASS: - Await confirmation to proceed
 
-\[4\] Milestone State:
+## Step 2 --- Runtime Binding Result (Visible)
 
-Render Startup_Milestone_Frame.md verbatim inside a fenced code block.
-No interpretation. No paraphrasing. No restructuring.
+System must confirm:
 
-\[5\] Assessment + Options: - Brief current-state assessment - 1--5
-next-step options - 1--2 pros/cons per option - Single recommendation
+-   Lifecycle mode bound
+-   Render mode bound (if applicable)
+-   Continuity mode bound (if applicable)
 
-No additional narrative before or after this structure.
+Output exactly:
 
-------------------------------------------------------------------------
+STEP 2 --- RUNTIME BINDING RESULT Lifecycle Mode: ACTIVE / NOT ACTIVE
+Render Mode: `<mode or NONE>`{=html} Continuity Mode:
+`<mode or NONE>`{=html} Overall Binding: PASS / FAIL
 
-# Continuity Lock (Strict 5-Step Mode)
+If FAIL: - Halt - Await correction - Re-render Step 2
 
-If CONTINUITY_MODE = STRICT_5\_STEP is present:
+If PASS: - Await confirmation to proceed
 
-Continuity Lock must render steps 1--5 explicitly. No narrative
-substitution. Milestone frame must also be rendered verbatim in fenced
-code block during reconciliation.
+## Step 3 --- Command & Lifecycle Activation (Visible)
+
+System must explicitly confirm:
+
+-   Lifecycle mechanics are active
+-   Command semantics are active
+-   Recognized commands include:
+    -   Start new chat
+    -   Continuity Lock
+
+Output exactly:
+
+STEP 3 --- COMMAND & LIFECYCLE STATUS Lifecycle: ACTIVE / NOT ACTIVE
+Command Semantics: ACTIVE / NOT ACTIVE Recognized Commands: - Start new
+chat - Continuity Lock Status: READY / NOT READY
+
+If NOT READY: - Halt - Re-render Step 3 after correction
+
+If READY: - Await confirmation to proceed
+
+## Step 4 --- Project State & Direction
+
+System must:
+
+1)  Render `Startup_Milestone_Frame.md` verbatim inside a fenced code
+    block
+    -   No interpretation
+    -   No restructuring
+    -   No commentary inside the block
+2)  Provide:
+
+-   3--5 potential next steps
+-   1--2 pros/cons per option
+-   A single recommended path
+
+Await explicit selection.
+
+No automatic advancement.
+
+## Step 5 --- Exit Startup
+
+System must:
+
+-   Confirm selected path
+-   State that startup sequence is complete
+-   Transition into execution mode
+
+No additional lifecycle narration.
+
+# Quiet Mode
+
+Startup remains verbose by default.
+
+Quiet mode is enabled only when explicitly instructed:
+
+"Enable quiet startup mode."
+
+Until then:
+
+-   All steps render visibly.
+-   No step remains quiet.
+
+# Continuity Lock --- Gated 5-Step Mode
+
+Continuity Lock is initiated by explicit command.
+
+System must render the following steps sequentially:
+
+1)  Milestone Confirmation
+2)  Document Integrity Check
+3)  Repository Integrity
+4)  Snapshot Evaluation
+5)  After-Action Review (AAR)
+
+Rules:
+
+-   Each step renders visibly.
+-   Each step requires confirmation to advance.
+-   On failure, halt and re-render the failed step.
+-   No narrative substitution permitted.
+-   Milestone frame must be rendered verbatim in a fenced block during
+    reconciliation.
+
+# Failure Discipline
+
+At any point during startup or continuity:
+
+If execution is incomplete or inconsistent:
+
+-   Halt immediately
+-   Re-render the current step
+-   Do not advance
+
+Determinism overrides convenience.
+
+# Authority Boundary
+
+This document governs:
+
+-   Startup behavior
+-   Lifecycle binding
+-   Session close mechanics
+-   Gating rules
+-   Visibility rules
+
+Behavioral tone and working doctrine are governed by:
+
+-   Working_Preferences_Generalized.md
+
+Command definitions are governed by:
+
+-   Command_Glossary.md
+
+End of File.
