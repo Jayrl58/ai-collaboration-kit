@@ -1,4 +1,4 @@
-AI Collaboration — After-Action Review (AAR) Log
+# AI Collaboration --- After-Action Review (AAR) Log
 
 Purpose:
 
@@ -6,68 +6,67 @@ Capture friction, improvements, and calibration signals from sessions.
 
 This document stores raw collaboration observations.
 
-Stable improvements are later extracted into:
-
-Working_Preferences_Generalized.md
-
-AI_Collaboration_Lifecycle.md
-
+Stable improvements are later extracted into: -
+Working_Preferences_Generalized.md - AI_Collaboration_Lifecycle.md -
 Command_Glossary.md
 
-Entry Template
-Session: <Project Name> — <YYYY-MM-DD>
-Friction Observed:
-What Worked Well:
-Calibration Adjustment Suggested:
+------------------------------------------------------------------------
 
-Action Required:
+# Entries
 
-Yes / No
+## Session: AI Collaboration --- 2026-02-16
 
-If No:
-No notes.
+Friction Observed: - None significant.
 
-Entries
-Session: AI Collaboration — 2026-02-16
+What Worked Well: - Separating global collaboration doctrine into a
+dedicated public repository clarified authority boundaries and reduced
+cross-project coupling. - The Version Channel model (`stable` tag)
+balanced control and maintainability better than strict pinning or
+floating `main`.
 
-Friction Observed:
+Calibration Adjustment Suggested: - Test Startup Protocol end-to-end
+using LMR before freezing or snapshotting the collaboration kit.
 
-None significant.
+Action Required: - Yes (Operational validation required before lifecycle
+snapshot).
 
-What Worked Well:
+------------------------------------------------------------------------
 
-Separating global collaboration doctrine into a dedicated public repository clarified authority boundaries and reduced cross-project coupling.
+## Session: AI Collaboration --- 2026-02-17 (Lifecycle Iteration Review)
 
-The Version Channel model (stable tag) balanced control and maintainability better than strict pinning or floating main.
+What happened: We spent roughly 12 iterations trying to make startup
+behave deterministically using lifecycle and startup document
+enforcement. We kept tightening the same mechanism (documents and
+flags), but the behavior did not fully comply.
 
-Calibration Adjustment Suggested:
+We eventually shifted to a gated, step-by-step model, which is more
+stable --- but it took too long to get there.
 
-Test Startup Protocol end-to-end using LMR before freezing or snapshotting the collaboration kit.
+Friction: We stayed too long inside one approach before stepping back
+and rethinking the architecture.
 
-Action Required:
+It felt like we were trying to force the model to behave like a
+deterministic state machine, when that may not be the right abstraction
+layer.
 
-Yes (Operational validation required before lifecycle snapshot).
+The iteration count was too high for the complexity of the goal.
 
-Session: AI Collaboration — 2026-02-17
+Insight: When something does not work after a couple of attempts, it is
+probably not a wording problem --- it is a structural problem.
 
-Friction Observed:
+The faster move would have been: - Step back earlier - Present 2--3
+architectural alternatives - Force a branch decision - Move forward
+decisively
 
-Repeated create → test → fail → revise cycles while tightening lifecycle startup and continuity lock enforcement.
+Calibration for Future Sessions: Adopt a pivot checkpoint: if two
+refinements of the same mechanism do not materially improve behavior,
+pause and reassess the abstraction layer before continuing.
 
-Descriptive governance language did not reliably produce deterministic startup behavior.
+Additional Process Improvement Identified: When generating replacement
+files for download, preserve the original filename and extension
+exactly. Changing file extensions creates unnecessary friction and adds
+manual cleanup steps during commit workflows.
 
-What Worked Well:
-
-Hard validation via STARTUP_SOURCES.md improved structural consistency.
-
-Explicit sequencing clarified where enforcement was breaking down.
-
-Calibration Adjustment Suggested:
-
-Favor literal output templates with strict rendering requirements over descriptive procedural language when deterministic behavior is required.
-
-Minimize iterative document rewrites without changing enforcement mechanism.
-
-Action Required:
-
-No
+Action Required: - Yes --- adopt earlier abstraction review when
+convergence stalls. - Yes --- preserve exact filenames and extensions
+when generating downloadable replacements.
