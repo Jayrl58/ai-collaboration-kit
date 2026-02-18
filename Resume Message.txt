@@ -1,29 +1,5 @@
-Resume Message — LMR
+Start new chat
 
-We are on master, fully pushed to GitHub.
-Working tree clean.
-All tests GREEN:
+Project: LMR
 
-126 total
-
-123 passed
-
-3 skipped (Phase 5 per-die delegation contracts)
-
-Latest snapshot: v3.1
-Phase 5 (turn + dice lifecycle contracts) locked.
-
-Current focus:
-
-Compare skipped tests vs intended contract
-
-Begin Phase 1 of per-die delegation:
-
-Add controllerId per pending die (state model only)
-
-Next concrete action:
-
-Modify SessionState.pendingDice shape to support controller per die.
-
-Do not implement full delegation yet.
-State-model only.
+Startup sources: STARTUP_SOURCES.md (in repo root)
