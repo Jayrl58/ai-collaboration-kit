@@ -15,25 +15,25 @@ Projects reference a channel (e.g., `stable`) rather than `main`.
 
 The `stable` tag is moved intentionally after structural updates.
 
-# Startup Architecture --- Gated Structured Pipeline (v3.0)
+# Startup Architecture --- Guided Manual Model (v4.0)
 
-Startup is deterministic and stepwise.
+Startup is stepwise and manually advanced.
 
 No step advances automatically.
 
-Each step renders visibly and requires affirmative confirmation to
-proceed.
+The system guides the user through each step sequentially.
 
-Accepted advancement acknowledgments include (not exhaustive):
+Advancement requires any affirmative acknowledgment, including but not
+limited to:
 
 -   yes
 -   ok
 -   okay
+-   next
 -   proceed
 -   move on
 
-If a step fails, it halts and re-renders that step. No automatic
-fallback.
+If a step fails, it halts and re-renders that step.
 
 # Startup Trigger
 
@@ -48,109 +48,111 @@ STARTUP_FAILED Missing: - `<filename>`{=html}
 
 Then halt.
 
-# Gated Startup Steps
+# Guided Startup Flow
 
-## Step 1 --- Validation Result (Visible)
+Upon valid trigger, system outputs only:
 
-System must:
+STARTUP --- GUIDED MODE
 
--   Confirm required global documents loaded
--   Confirm required project documents loaded
+Next step: STEP 1 --- VALIDATION Awaiting confirmation.
 
-Output exactly:
+No automatic execution occurs.
+
+# Step Definitions
+
+## STEP 1 --- VALIDATION
+
+System confirms required global and project documents loaded.
+
+Output format:
 
 STEP 1 --- VALIDATION RESULT Global Documents: PASS / FAIL Project
 Documents: PASS / FAIL Overall: PASS / FAIL
 
-If FAIL: - Halt - Await correction - Re-render Step 1
+If FAIL: - Halt - Await correction - Re-render STEP 1
 
-If PASS: - Await confirmation to proceed
+If PASS: - Print:
 
-## Step 2 --- Runtime Binding Result (Visible)
+Step 1 complete. Next step: STEP 2 --- RUNTIME BINDING Awaiting
+confirmation.
 
-System must confirm:
+## STEP 2 --- RUNTIME BINDING
 
--   Lifecycle mode bound
--   Render mode bound (if applicable)
--   Continuity mode bound (if applicable)
+System confirms lifecycle and mode binding.
 
-Output exactly:
+Output format:
 
 STEP 2 --- RUNTIME BINDING RESULT Lifecycle Mode: ACTIVE / NOT ACTIVE
 Render Mode: `<mode or NONE>`{=html} Continuity Mode:
 `<mode or NONE>`{=html} Overall Binding: PASS / FAIL
 
-If FAIL: - Halt - Await correction - Re-render Step 2
+If FAIL: - Halt - Re-render STEP 2
 
-If PASS: - Await confirmation to proceed
+If PASS: - Print:
 
-## Step 3 --- Command & Lifecycle Activation (Visible)
+Step 2 complete. Next step: STEP 3 --- COMMAND & LIFECYCLE STATUS
+Awaiting confirmation.
 
-System must explicitly confirm:
+## STEP 3 --- COMMAND & LIFECYCLE STATUS
 
--   Lifecycle mechanics are active
--   Command semantics are active
+System confirms:
+
+-   Lifecycle mechanics active
+-   Command semantics active
 -   Recognized commands include:
     -   Start new chat
     -   Continuity Lock
 
-Output exactly:
+Output format:
 
 STEP 3 --- COMMAND & LIFECYCLE STATUS Lifecycle: ACTIVE / NOT ACTIVE
 Command Semantics: ACTIVE / NOT ACTIVE Recognized Commands: - Start new
 chat - Continuity Lock Status: READY / NOT READY
 
-If NOT READY: - Halt - Re-render Step 3 after correction
+If NOT READY: - Halt - Re-render STEP 3
 
-If READY: - Await confirmation to proceed
+If READY: - Print:
 
-## Step 4 --- Project State & Direction
+Step 3 complete. Next step: STEP 4 --- PROJECT STATE & DIRECTION
+Awaiting confirmation.
+
+## STEP 4 --- PROJECT STATE & DIRECTION
 
 System must:
 
 1)  Render `Startup_Milestone_Frame.md` verbatim inside a fenced code
-    block
-    -   No interpretation
-    -   No restructuring
-    -   No commentary inside the block
-2)  Provide:
-
--   3--5 potential next steps
--   1--2 pros/cons per option
--   A single recommended path
+    block.
+2)  Provide 3--5 next-step options.
+3)  Provide 1--2 pros/cons per option.
+4)  Provide a single recommendation.
 
 Await explicit selection.
 
-No automatic advancement.
+After selection:
 
-## Step 5 --- Exit Startup
+Step 4 complete. Next step: STEP 5 --- EXIT STARTUP Awaiting
+confirmation.
 
-System must:
+## STEP 5 --- EXIT STARTUP
 
--   Confirm selected path
--   State that startup sequence is complete
--   Transition into execution mode
+System confirms chosen path and transitions to execution mode.
 
-No additional lifecycle narration.
+Output:
 
-# Quiet Mode
+Startup sequence complete. Execution mode active.
 
-Startup remains verbose by default.
+# Continuity Lock --- Guided 5-Step Mode
 
-Quiet mode is enabled only when explicitly instructed:
+When "Continuity Lock" is invoked:
 
-"Enable quiet startup mode."
+System enters guided mode and renders:
 
-Until then:
+CONTINUITY LOCK --- GUIDED MODE
 
--   All steps render visibly.
--   No step remains quiet.
+Next step: STEP 1 --- MILESTONE CONFIRMATION Awaiting confirmation.
 
-# Continuity Lock --- Gated 5-Step Mode
-
-Continuity Lock is initiated by explicit command.
-
-System must render the following steps sequentially:
+Each of the following steps must execute individually and require
+confirmation:
 
 1)  Milestone Confirmation
 2)  Document Integrity Check
@@ -158,14 +160,9 @@ System must render the following steps sequentially:
 4)  Snapshot Evaluation
 5)  After-Action Review (AAR)
 
-Rules:
+No step auto-advances.
 
--   Each step renders visibly.
--   Each step requires confirmation to advance.
--   On failure, halt and re-render the failed step.
--   No narrative substitution permitted.
--   Milestone frame must be rendered verbatim in a fenced block during
-    reconciliation.
+Failure at any step halts and re-renders that step.
 
 # Failure Discipline
 
@@ -177,8 +174,6 @@ If execution is incomplete or inconsistent:
 -   Re-render the current step
 -   Do not advance
 
-Determinism overrides convenience.
-
 # Authority Boundary
 
 This document governs:
@@ -186,8 +181,7 @@ This document governs:
 -   Startup behavior
 -   Lifecycle binding
 -   Session close mechanics
--   Gating rules
--   Visibility rules
+-   Guided progression rules
 
 Behavioral tone and working doctrine are governed by:
 
