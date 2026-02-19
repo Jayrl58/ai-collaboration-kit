@@ -1,11 +1,13 @@
 # AI Collaboration Lifecycle
 
-This document governs startup and session-close mechanics for all
-projects using the AI Collaboration Kit.
+This document governs startup and session-close mechanics for all projects using the AI Collaboration Kit.
 
-Behavioral doctrine is defined in: - Working_Preferences_Generalized.md
+Behavioral doctrine is defined in:
+- Working_Preferences_Generalized.md
 
-Command semantics are defined in: - Command_Glossary.md
+Command semantics are defined in:
+- Command_Glossary.md
+
 
 # Version Model
 
@@ -15,180 +17,152 @@ Projects reference a channel (e.g., `stable`) rather than `main`.
 
 The `stable` tag is moved intentionally after structural updates.
 
-# Startup Architecture --- Guided Manual Model (v4.0)
 
-Startup is stepwise and manually advanced.
+# Startup Architecture — Manual, User-Gated (v5.0)
 
-No step advances automatically.
+Startup is executed as a manual, stepwise sequence directed by the user.
 
-The system guides the user through each step sequentially.
+Startup MUST NOT auto-advance across steps based on an implicit pipeline.
 
-Advancement requires any affirmative acknowledgment, including but not
-limited to:
+The user may speak or type instructions.
 
--   yes
--   ok
--   okay
--   next
--   proceed
--   move on
+The system must:
+- Execute only the requested step
+- Stop after completing that step
 
-If a step fails, it halts and re-renders that step.
 
-# Startup Trigger
+## Startup Trigger
 
-Startup is triggered by:
-
-1)  Upload `STARTUP_SOURCES.md`
-2)  Invoke: "Start new chat" with `Project: <name>`
+Startup is initiated by:
+1) Upload `STARTUP_SOURCES.md`
+2) User invokes: “Start new chat” with `Project: <name>`
 
 If required documents are missing, output only:
 
-STARTUP_FAILED Missing: - `<filename>`{=html}
+STARTUP_FAILED Missing:
+- <filename>
 
 Then halt.
 
-# Guided Startup Flow
 
-Upon valid trigger, system outputs only:
+## Recommended Manual Startup Steps (LMR Pattern)
 
-STARTUP --- GUIDED MODE
+These are recommended phrases; equivalent phrasing is acceptable as long as scope and “stop” behavior are respected.
 
-Next step: STEP 1 --- VALIDATION Awaiting confirmation.
+1) Validate sources only, then stop
+2) Bind sources only, then stop
+3) Render milestone state only, then stop
+4) Present decision options only, then stop
+5) Enter execution mode
 
-No automatic execution occurs.
 
-# Step Definitions
+## Milestone Rendering Rule
 
-## STEP 1 --- VALIDATION
+When rendering Startup_Milestone_Frame.md:
+- Render the top-level milestone list
+- If exactly one milestone is In Progress (→), auto-expand ONLY that milestone’s sub-items
+- Sub-items must include status markers ✓ / → / ○
+- Do not show sub-items under completed (✓) or planned (○) milestones
+- No narrative
 
-System confirms required global and project documents loaded.
 
-Output format:
+## Decision Options Format (Universal)
 
-STEP 1 --- VALIDATION RESULT Global Documents: PASS / FAIL Project
-Documents: PASS / FAIL Overall: PASS / FAIL
+When presenting options for a decision:
+- Provide exactly the requested number of options (if specified)
+- For each option, use labeled sections:
+  - Accomplishes
+  - Pros
+  - Cons
+- Then provide one Recommendation section
+- Do not restate the milestone list unless explicitly requested
 
-If FAIL: - Halt - Await correction - Re-render STEP 1
 
-If PASS: - Print:
+# Continuity Lock — Manual, User-Gated (v5.0)
 
-Step 1 complete. Next step: STEP 2 --- RUNTIME BINDING Awaiting
-confirmation.
+Continuity Lock is initiated by the user invoking: “Continuity Lock”.
 
-## STEP 2 --- RUNTIME BINDING
+Continuity Lock MUST NOT auto-advance across steps.
 
-System confirms lifecycle and mode binding.
+Before executing each step, the system must state:
+- Confirming: what is being confirmed
+- PASS if: what constitutes pass
+- FAIL if: what constitutes fail
 
-Output format:
+Then execute only that step and stop.
 
-STEP 2 --- RUNTIME BINDING RESULT Lifecycle Mode: ACTIVE / NOT ACTIVE
-Render Mode: `<mode or NONE>`{=html} Continuity Mode:
-`<mode or NONE>`{=html} Overall Binding: PASS / FAIL
+The 5 steps are:
 
-If FAIL: - Halt - Re-render STEP 2
+1) Milestone Confirmation
+2) Document Integrity Check
+3) Repository Integrity
+4) Snapshot Evaluation
+5) After-Action Review (AAR)
 
-If PASS: - Print:
 
-Step 2 complete. Next step: STEP 3 --- COMMAND & LIFECYCLE STATUS
-Awaiting confirmation.
+## Step Definitions
 
-## STEP 3 --- COMMAND & LIFECYCLE STATUS
+### 1) Milestone Confirmation
 
-System confirms:
+Confirming:
+- Current milestone and current focus are correctly stated from the milestone frame (including the expanded In Progress milestone sub-items).
 
--   Lifecycle mechanics active
--   Command semantics active
--   Recognized commands include:
-    -   Start new chat
-    -   Continuity Lock
+PASS if:
+- The In Progress milestone is correct
+- The active sub-item focus is correct (or is explicitly corrected)
 
-Output format:
+FAIL if:
+- In Progress milestone is unclear/wrong/multiple
+- Focus is missing/incorrect and not resolved
 
-STEP 3 --- COMMAND & LIFECYCLE STATUS Lifecycle: ACTIVE / NOT ACTIVE
-Command Semantics: ACTIVE / NOT ACTIVE Recognized Commands: - Start new
-chat - Continuity Lock Status: READY / NOT READY
 
-If NOT READY: - Halt - Re-render STEP 3
+### 2) Document Integrity Check
 
-If READY: - Print:
+Confirming:
+- No authoritative document contradicts what we just did or intend to do.
 
-Step 3 complete. Next step: STEP 4 --- PROJECT STATE & DIRECTION
-Awaiting confirmation.
+PASS if:
+- No contradictions exist, or contradictions are explicitly resolved and stated.
 
-## STEP 4 --- PROJECT STATE & DIRECTION
+FAIL if:
+- A contradiction exists and is unresolved.
 
-System must:
 
-1)  Render `Startup_Milestone_Frame.md` verbatim inside a fenced code
-    block.
-2)  Provide 3--5 next-step options.
-3)  Provide 1--2 pros/cons per option.
-4)  Provide a single recommendation.
+### 3) Repository Integrity
 
-Await explicit selection.
+Confirming:
+- Repository state is as expected (branch and working tree).
 
-After selection:
+PASS if:
+- Correct branch
+- No unintended uncommitted changes
 
-Step 4 complete. Next step: STEP 5 --- EXIT STARTUP Awaiting
-confirmation.
+FAIL if:
+- Wrong branch, unexpected modified files, or unintended untracked clutter
 
-## STEP 5 --- EXIT STARTUP
 
-System confirms chosen path and transitions to execution mode.
+### 4) Snapshot Evaluation
 
-Output:
+Confirming:
+- Whether a snapshot is required now.
 
-Startup sequence complete. Execution mode active.
+PASS if:
+- Clear Yes/No decision is made and aligns with snapshot discipline.
 
-# Continuity Lock --- Guided 5-Step Mode
+FAIL if:
+- Decision is unclear or deferred without an explicit rationale.
 
-When "Continuity Lock" is invoked:
 
-System enters guided mode and renders:
+### 5) After-Action Review (AAR)
 
-CONTINUITY LOCK --- GUIDED MODE
+Confirming:
+- Session friction and calibration notes are captured.
 
-Next step: STEP 1 --- MILESTONE CONFIRMATION Awaiting confirmation.
+PASS if:
+- AAR entries are recorded (or explicitly “none”).
 
-Each of the following steps must execute individually and require
-confirmation:
+FAIL if:
+- Known friction is not captured.
 
-1)  Milestone Confirmation
-2)  Document Integrity Check
-3)  Repository Integrity
-4)  Snapshot Evaluation
-5)  After-Action Review (AAR)
-
-No step auto-advances.
-
-Failure at any step halts and re-renders that step.
-
-# Failure Discipline
-
-At any point during startup or continuity:
-
-If execution is incomplete or inconsistent:
-
--   Halt immediately
--   Re-render the current step
--   Do not advance
-
-# Authority Boundary
-
-This document governs:
-
--   Startup behavior
--   Lifecycle binding
--   Session close mechanics
--   Guided progression rules
-
-Behavioral tone and working doctrine are governed by:
-
--   Working_Preferences_Generalized.md
-
-Command definitions are governed by:
-
--   Command_Glossary.md
 
 End of File.
